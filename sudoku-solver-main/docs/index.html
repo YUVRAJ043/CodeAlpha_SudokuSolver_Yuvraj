@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" prefix="og: http://ogp.me/ns#">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snap & Solve: Turn Puzzle Images into Sudoku Answers</title>
+    <meta name="author" content="Dor Pascal">
+    <meta name="keywords" content="sudoku, solver, puzzle, game, board, image, recognition, AI, OCR, tesseract">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#368dd9">
+    <meta property="og:title" content="Snap & Solve: Turn Puzzle Images into Sudoku Answers" />
+    <meta property="og:description"
+        content="Fastest Sudoku solver ever. Enter a board, click solve, and see the magic happen. Upload an image or enter a board to solve the puzzle. Built with modern webassembly and tesseract.js. Designed in C++ and JavaScript." />
+    <meta property="og:image" href="https://dorpascal.com/sudoku-solver/sudoku-solver.png">
+    <meta property="og:image:width" content="714">
+    <meta property="og:image:height" content="647">
+    <meta property="og:url" content="https://dorpascal.com/sudoku-solver/" />
+    <meta property="og:site_name" content="Sudoku Solver - Solution to any puzzle with Snap & Solve" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image:alt" content="Snap & Solve: Turn Puzzle Images into Sudoku Answers" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://dorpascal.com/sudoku-solver/sudoku-solver.png">
+    <meta property="article:published_time" content="2024-06-27T22:24:22.000Z" />
+    <meta property="article:modified_time" content="2024-07-09T10:38:57Z" />
+    <meta name="description"
+        content="Sudoku solver that turns puzzle images into answers. Upload an image or enter a board to solve the puzzle. Built with modern webassembly and tesseract.js. Designed in C++ and JavaScript.">
+    <link rel="canonical" href="https://dorpascal.com/sudoku-solver/" />
+    <link rel="icon" href="./favicon.ico">
+    <link rel="preload" href="./css/styles.css" as="style">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Roboto:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="./css/styles.css">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-T7HFKFX0PR"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-T7HFKFX0PR');
+    </script>
+</head>
+
+<body>
+    <header>
+        <div>
+            <input type="file" id="fileInput" accept="image/*" style="display: none;">
+            <label for="fileInput" class="upload-btn">
+                <i class="fas fa-camera icon-style"></i>
+            </label>
+            <button id="home-btn" class="transparent-btn" onclick="window.location.href='https://dorpascal.com/'">
+                <i class="fas fa-home icon-style"></i>
+            </button>
+            <button id="help-btn" class="transparent-btn">
+                <i class="fas fa-question-circle icon-style"></i>
+            </button>
+        </div>
+
+        <div id="theme-toggle" class="theme-toggle">
+            <div class="toggle-inner">
+                <div class="toggle-handle"></div>
+            </div>
+        </div>
+    </header>
+    <main>
+        <section id="parser">
+            <canvas id="canvas" style="display: block;"></canvas>
+            <pre id="result"></pre>
+            <div class="processingMessage">Please crop the Sudoku board and click confirm</div>
+            <div id="processedImageContainer"></div>
+        </section>
+        <div id="sudoku-board"></div>
+        <h1>Snap & Solve</h1>
+        <div id="tutorial-popup" class="tutorial-popup" role="dialog" aria-labelledby="tutorial-title"
+            aria-describedby="tutorial-desc">
+            <div class="tutorial-step" data-step="1">
+                <p id="tutorial-title">👋 Welcome to the Sudoku Solver!</p>
+                <p id="tutorial-desc">🔍 Upload an image or enter a Sudoku board to solve the puzzle.</p>
+                <div class="button-group">
+                    <button class="close-btn" aria-label="Close tutorial">❌ Close</button>
+                    <button class="next-btn" aria-label="Next step">➡️ Next</button>
+                </div>
+            </div>
+            <div class="tutorial-step" data-step="2" style="display:none;">
+                <h2>How to use the Interactive Board</h2>
+                <ul class="tutorial-instructions">
+                    <li>
+                        <span class="icon">🖱️</span> Slide with your fingers, mouse, or scroll wheel to interact with
+                        the board.
+                    </li>
+                    <li>
+                        <span class="icon"><i class="fas fa-camera" aria-hidden="true"></i></span> Click on the camera
+                        icon to upload a board.
+                    </li>
+                    <li>
+                        <span class="icon"><i class="fas fa-home" aria-hidden="true"></i></span> Click on the home icon
+                        to return to the Homepage.
+                    </li>
+                </ul>
+                <div class="button-group">
+                    <button class="close-btn" aria-label="Close tutorial">❌ Close</button>
+                    <button class="next-btn" aria-label="Next step">➡️ Next</button>
+                </div>
+            </div>
+            <div class="tutorial-step" data-step="3" style="display:none;">
+                <p>📝 You can enter the Sudoku board in multiple ways:</p>
+                <ul class="no-bullets">
+                    <li>📷 Take a picture or choose an image from your device.</li>
+                    <li>🖱️ Drag and drop an image.</li>
+                    <li>✍️ Enter the board as a text line in the input field.</li>
+                </ul>
+                <div class="button-group">
+                    <button class="close-btn" aria-label="Close tutorial">❌ Close</button>
+                    <button class="next-btn" aria-label="Next step">➡️ Next</button>
+                </div>
+            </div>
+            <div class="tutorial-step" data-step="4" style="display:none;">
+                <p>🖼️ If you upload an image, crop the Sudoku board and confirm for best results.</p>
+                <p>📝 You can also edit the board by clicking on the cells or using the input field.</p>
+                <div class="button-group">
+                    <button class="close-btn" aria-label="Close tutorial">❌ Close</button>
+                    <button class="next-btn" aria-label="Next step">➡️ Next</button>
+                </div>
+            </div>
+            <div class="tutorial-step" data-step="5" style="display:none;">
+                <p>🚀 Ready to solve the Sudoku puzzle?</p>
+                <p>Try to copy and paste the hardest Sudoku puzzle ever (according to <a
+                        href="https://www.telegraph.co.uk/news/science/science-news/9359579/Worlds-hardest-sudoku-can-you-crack-it.html"
+                        target="_blank">The Telegraph</a>).</p>
+                <textarea
+                    class="board-example">8..........36......7..9.2...5...7.......457.....1...3...1....68..85...1..9....4..</textarea>
+                <br>
+                <button class="copy-btn"
+                    data-text="8..........36......7..9.2...5...7.......457.....1...3...1....68..85...1..9....4.."
+                    aria-label="Copy puzzle">📋 Copy</button>
+                <br><br>
+                <div class="button-group">
+                    <button class="close-btn" aria-label="Close tutorial">✅ Finish</button>
+                </div>
+            </div>
+        </div>
+        <div class="actions">
+            <input id="input-board" type="text" placeholder="Enter board as one line...">
+            <button onclick="solveSudoku()" class="solve-button" aria-label="Solve Sudoku" id="solve-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+            </button>
+            <div class="cropping-actions" id="cropping-actions" display="none">
+                <button id="cancelCrop">Close</button>
+                <button id="confirmCrop">Confirm Crop</button>
+                <input type="range" id="rotationSlider" min="0" max="360" value="0">
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>Built By Dor ©
+            <script>document.write(new Date().getFullYear());</script>
+        </p>
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
+    <script src="./js/sudoku.js"></script>
+    <script src="./js/tutorial.js"></script>
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const themeToggle = document.getElementById('theme-toggle');
+        const tutorialPopup = document.getElementById('tutorial-popup');
+
+        function toggleTheme() {
+            themeToggle.classList.toggle('toggle-on');
+            document.body.classList.toggle('dark-theme');
+        }
+
+        function closePopup() {
+            tutorialPopup.style.display = 'none';
+        }
+
+        themeToggle.addEventListener('click', toggleTheme);
+
+
+
+        document.addEventListener('dragover', function (event) {
+            event.preventDefault();
+        });
+
+        document.body.addEventListener('click', function (e) {
+            if (e.target.classList.contains('close-btn')) {
+                closePopup();
+            }
+        });
+
+
+
+        function solveSudoku() {
+            const boardStr = readBoard();
+            console.log(boardStr);
+            if (boardStr.length !== 81) {
+                alert('Please fill all cells with valid numbers');
+                return;
+            }
+
+            if (!isValidSudoku(boardStr)) {
+                alert('Invalid Sudoku board');
+                return;
+            }
+            const csp = new Module.SudokuCSP(boardStr);
+            csp.solve();
+            const solvedBoardStr = csp.getBoard();
+            console.log(solvedBoardStr);
+            updateBoard(solvedBoardStr);
+        }
+
+        function readBoard() {
+            const inputBoard = document.getElementById('input-board');
+            return inputBoard.value.trim();
+        }
+
+        function isValidSudoku(boardStr) {
+            for (let i = 0; i < 9; i++) {
+                for (let j = 0; j < 9; j++) {
+                    if (boardStr[i * 9 + j] !== '.') {
+                        const num = boardStr[i * 9 + j];
+                        boardStr = boardStr.substr(0, i * 9 + j) + '.' + boardStr.substr(i * 9 + j + 1);
+                        if (!isValidPlacement(boardStr, i, j, num)) {
+                            return false;
+                        }
+                        boardStr = boardStr.substr(0, i * 9 + j) + num + boardStr.substr(i * 9 + j + 1);
+                    }
+                }
+            }
+            return true;
+        }
+
+
+        function isValidPlacement(boardStr, row, col, num) {
+            for (let i = 0; i < 9; i++) {
+                if (boardStr[row * 9 + i] === num || boardStr[i * 9 + col] === num) {
+                    return false;
+                }
+            }
+            const startRow = Math.floor(row / 3) * 3;
+            const startCol = Math.floor(col / 3) * 3;
+            for (let i = startRow; i < startRow + 3; i++) {
+                for (let j = startCol; j < startCol + 3; j++) {
+                    if (boardStr[i * 9 + j] === num) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        function celebrate() {
+            const cells = document.querySelectorAll('.number');
+            const numbers = document.querySelectorAll('.number');
+            function changeTheme() {
+                const themeToggle = document.getElementById('theme-toggle');
+                themeToggle.click();
+            }
+            changeTheme();
+            cells.forEach(cell => cell.classList.add('celebrateEffect'));
+            numbers.forEach(number => number.style.color = '#368dd9');
+            setTimeout(() => {
+                cells.forEach(cell => cell.classList.remove('celebrateEffect'));
+                numbers.forEach(number => number.style.color = '#00172b');
+                changeTheme();
+            }, 4000);
+        }
+        const script = document.createElement('script');
+        script.src = './src/sudoku_solver.js';
+        document.body.appendChild(script);
+    </script>
+    <script src="./js/parser.js"></script>
+
+</body>
+
+</html>

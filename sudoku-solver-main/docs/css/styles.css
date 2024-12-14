@@ -1,0 +1,622 @@
+/* Root Variables for Light Theme */
+:root {
+    --background-color: #f0f0f0;
+    --text-color: #2D2D2D;
+    --button-background-color: #F5F5F5;
+    --button-hover-background-color: #E0E0E0;
+    --footer-text-color: #ffffff;
+    --primary-color: #1E88E5;
+    --focus-color: #1E88E5;
+    --sudoku-board-color: #ffffff;
+    --font-stack: 'San Francisco', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+main {
+height: 100vh;
+display: flex;
+flex-direction:
+column;
+align-items: center;
+}
+#imageToCrop {
+margin: 4rem;
+padding: 1rem;
+width: 70%;
+height: auto;
+}
+/* #canvas {
+    display: hidden;
+} */
+.parcer {
+    display: block;
+    margin: 0 auto;
+    padding: 1rem;
+    width: 70%;
+    height: auto;
+}
+/* Root Variables for Dark Theme */
+.dark-theme {
+    --background-color: #121212;
+    --text-color: #E0E0E0;
+    --button-background-color: #424242;
+    --button-hover-background-color: #535353;
+    --footer-text-color: #757575;
+    --primary-color: #1E88E5;
+    --sudoku-board-color: #333333;
+}
+
+/* Body Styling */
+body,html {
+    font-family: var(--font-stack);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+
+    width: 100%;
+    margin: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    overflow-x: hidden;
+}
+
+
+
+
+
+button,
+#input-board {
+    padding: 10px 20px;
+    margin: 0.5rem;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--button-background-color);
+    color: var(--text-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+            min-height: 40px; /* Minimum height to start with */
+
+}
+
+#input-board{
+width: 100%;
+font-size: 14px;
+}
+button:hover,
+#input-board:hover {
+    background-color: var(--button-hover-background-color);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+button:active,
+#input-board:active {
+    transform: scale(0.98);
+
+}
+
+.solve-button, .reset-button {
+    /* background-color: var(--primary-color); */
+    color: var(--text-color);
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    width: 60px;
+    height: 40px;
+
+}
+
+
+
+#parser {
+    display: none;
+    max-height: 60vh;
+    max-width: 90vw;
+    overflow-y: auto;
+}
+
+
+
+#sudoku-board {
+margin-top: 1rem;
+    font-family: 'Roboto Mono', monospace;
+
+ background-color: var(--sudoku-board-color );
+    border: 2px solid #000;
+    border-radius: 0px;
+    max-width: 600px;
+    max-height: 600px;
+    z-index: 1;
+    position: relative;
+}
+
+/* Updated h1 Styling */
+h1 {
+    font-size: 1.5rem;
+    margin: 1rem;
+    color: var(--text-color);
+    text-align: center;
+}
+
+h2 {
+    display: none;
+}
+header, .header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    border-radius: 0; /* Typically, Apple's nav bars are flat against the edge */
+    transition: background 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease, transform 0.5s ease-out; /* Smooth transitions for visual effects */
+    -webkit-backdrop-filter: blur(2px); /* For Safari */
+    backdrop-filter: saturate(180%) blur(2px); /* Creates a frosted glass effect */
+    text-decoration: none;
+    z-index: 4;
+}
+
+        footer {
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            background-color: #368dd9;
+            padding: 10px;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            position: fixed;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: small;
+            color: var(--footer-text-color)
+        }
+
+
+/* Additional Component Styling */
+.theme-toggle {
+    right: 0;
+    width: 60px;
+    height: 30px;
+    background-color: #ccc;
+    border-radius: 15px;
+    transform: translateX(-20%);
+    position: absolute;
+}
+
+.toggle-inner {
+    position: absolute;
+    width: 25%;
+    height: 100%;
+    transition: transform 0.2s ease;
+}
+
+.toggle-handle {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+    background-color: #fff;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-on .toggle-inner {
+    transform: translateX(200%);
+}
+
+
+.tutorial-popup {
+display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    line-height: 1.5;
+    transform: translate(-50%, -50%);
+    background-color: var(--sudoku-board-color);
+    padding: 20px 10px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    max-width: 90%;
+    width: 400px;
+    z-index: 2;
+    transition: all 0.3s ease;
+    overflow-y: auto;
+    max-height: 80vh;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.tutorial-popup p,
+.tutorial-popup ul {
+    margin: 0 0 15px 0;
+    padding: 0;
+    align-self: start;
+    text-align: left;
+}
+
+.tutorial-step {
+    display: none;
+    animation: fadeIn 0.3s ease;
+    align-items: center;
+    text-align: center;
+}
+
+.tutorial-step p,
+.tutorial-step ul {
+    margin: 0 0 15px 0;
+    padding: 0;
+}
+
+.tutorial-step ul {
+    list-style: disc;
+    padding-left: 20px;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.copy-btn {
+    margin-left: 10px;
+    padding: 5px 10px;
+    background-color: var(--button-background-color);
+    color: var(--text-color);
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.copy-btn:hover {
+    background-color: var(--button-hover-background-color);
+}
+
+.next-btn,
+.close-btn {
+    background-color: var(--button-background-color);
+    color: var(--text-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+.next-btn:hover,
+.close-btn:hover {
+    background-color: var(--button-hover-background-color);
+}
+
+#help-btn {
+    bottom: 0;
+    right: 0;
+    background-color: var(--button-background-color);
+    color: var(--text-color);
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+#help-btn:hover {
+    background-color: var(--button-hover-background-color);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#imageToCrop {
+    margin: 4rem;
+    padding: 1rem;
+    width: 70%;
+    height: auto;
+}
+
+.parcer {
+    display: block;
+    margin: 0 auto;
+    padding: 1rem;
+    width: 70%;
+    height: auto;
+}
+
+#processedImageContainer {
+    display: none;
+    align-content: space-between;
+    justify-content: flex-end;
+    align-items: center;
+    flex-direction: column-reverse;
+
+}
+
+#processedImage {
+    max-width: 80%;
+    max-height: 80%;
+}
+
+#processedImageContainer.show {
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+label {
+    padding: 10px 20px;
+    background-color: var(--footer-text-color);
+    color: var(--text-color);
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+.upload-btn {
+    background-color: var(--footer-text-color);
+    color: var(--text-color);
+    padding: 10px 25px;
+    border-radius: 5px;
+    transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-right: 0.5rem;
+    margin-left: 1rem;
+
+}
+
+.upload-btn:hover, .solve-button:hover {
+background-color: rgba(0, 123, 255, 0.1);
+    transform: scale(1.05);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Adjusted .design-info CSS */
+.design-info {
+    display: block;
+    text-align: left;
+    position: absolute;
+    left: 0;
+    bottom: 3rem;
+    margin: 1rem;
+}
+
+
+.design-info p {
+    margin-block-start: 0rem;
+    margin-block-end: 0rem;
+    left: 0;
+    z-index: 1;
+}
+.design-info a {
+    color: var(--focus-color);
+    text-decoration: none;
+}
+
+.cropping-actions {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    margin-top: 1rem;
+}
+
+#actions {
+display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    bottom: 0;
+    left: 50%;
+}
+
+
+td {
+    width: 50px;
+    height: 50px;
+    aspect-ratio: 1/1;
+    text-align: center;
+    vertical-align: middle;
+    position: relative;
+    overflow: hidden;
+
+}
+
+/* Pseudo-element for the board */
+.spinner {
+    min-width: 35px;
+    min-height: 35px;
+    aspect-ratio: 1/1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    z-index: 2;
+}
+.wheel {
+    display: flex;
+    flex-direction: column;
+    /* Enhanced visual effect */
+    transition: transform 0.3s ease; /* Reintroduce transition for smoothness */
+}
+
+.number {
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px; /* Increased font size */
+    transition: all 0.3s ease; /* Smooth transition for interactivity */
+    color: var(--text-color);
+}
+.number:hover {
+    transform: scale(1.1); /* Slightly enlarge digits on hover */
+    cursor: pointer; /* Change cursor to indicate interactivity */
+}
+#sudoku-board {
+    position: relative; /* Ensure this is set so the pseudo-element positions correctly */
+    /* Other styles for sudoku board */
+}
+
+@keyframes glowPulse {
+    0%, 100% {
+        text-shadow:
+            0 0 10px #ff69b4, /* Light pink */
+            0 0 20px #ff69b4,
+            0 0 30px #ff1493, /* Deep pink */
+            0 0 40px #ff1493,
+            0 0 50px #c71585, /* Medium violet red */
+            0 0 60px #c71585,
+            0 0 70px #db7093, /* Pale violet red */
+            0 0 80px #db7093;
+    }
+    50% {
+        text-shadow:
+            0 0 20px #add8e6, /* Light blue */
+            0 0 30px #add8e6,
+            0 0 40px #00bfff, /* Deep sky blue */
+            0 0 50px #00bfff,
+            0 0 60px #1e90ff, /* Dodger blue */
+            0 0 70px #1e90ff,
+            0 0 80px #4169e1, /* Royal blue */
+            0 0 90px #4169e1;
+    }
+}
+
+.celebrateEffect {
+color: #ffffff !important;
+    animation: glowPulse 5s ease-out infinite;
+    transition: background-color 0.3s, text-shadow 0.3s;
+}
+
+/* use darker color for the top middle, left middle, right middle, bottom middle  groups of 3x3 cells */
+ #sudoku-board td:nth-child(4), #sudoku-board td:nth-child(7)
+ {
+    border-left: 2px solid var(--text-color);
+}
+
+
+/* Add a bottom border to the rows before the sections */
+.section-border td {
+    border-bottom: 2px solid var(--text-color) /* Adjust color and thickness as needed */
+}
+
+td{
+    border: 0.5px solid var(--text-color);
+}
+        /* Responsive Adjustments */
+@media screen and (max-width: 520px) {
+
+    #sudoku-board {
+    min-width: calc(100vw - 35px);
+    min-height: calc(100vw - 35px);
+    aspect-ratio: 1/1;
+        border-radius: 0;
+        gap: 0;
+    }
+
+/* use darker color for the top middle, left middle, right middle, bottom middle  groups of 3x3 cells */
+ #sudoku-board td:nth-child(4), #sudoku-board td:nth-child(7)
+ {
+    border-left: 2px solid var(--text-color)
+}
+
+
+/* Add a bottom border to the rows before the sections */
+.section-border td {
+    border-bottom: 2px solid var(--text-color); /* Adjust color and thickness as needed */
+}
+    td {
+        height: calc( (100vw - 35px) / 9);
+        width: calc( (100vw - 35px) / 9);
+        font-size: 0.8rem;
+        border: 0.05px solid var(--text-color);
+    }
+
+    .spinner {
+        min-width: calc( (100vw - 35px) / 9);
+        min-height: calc( (100vw - 35px) / 9);
+    }
+
+    .number {
+        font-size: calc( (100vw - 54px) / 9);
+        height: 50px;
+            color: var(--text-color);
+
+    }
+
+
+    .design-info {
+    display: flex;
+        text-align: left;
+        font-size: 0.8rem;
+        white-space: nowrap;
+        flex-direction: row;
+    }
+    h1 {
+        font-size: 0.8rem;
+        margin-right: 0.2rem;
+        margin-left: 0rem;
+    }
+    #actions, .header {
+        align-items: center;
+        justify-content: center;
+        overflow: auto; /* Adjust as needed */
+    }
+
+
+}
+
+
+
+/* .cropper-hidden {
+    display: block !important;
+} */
+
+
+/* ------------------- */
+
+
+#sudoku-board::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: 100% 100%;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.1);
+}
+
+body.dark-theme #sudoku-board::before {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+
+body.dtark-theme td {
+    border: 1px solid #262626; /* Adjusted to match the metallic theme */
+    /* background: linear-gradient(145deg, #262626, #4d4d4d); Consistent metallic look */
+    box-shadow:
+        inset 2px 2px 5px #1a1a1a, /* Inner shadow for depth */
+        inset -2px -2px 5px #333333, /* Highlight for the curved effect */
+        2px 2px 5px rgba(0,0,0,0.3), /* Soft outer shadow for lifted effect */
+        -2px -2px 5px rgba(255,255,255,0.7); /* Outer highlight for additional depth */
+}
+/* Pseudo-element for the board */
+/* ------------------- */
+
+
+    .actions {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
